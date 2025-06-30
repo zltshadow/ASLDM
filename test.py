@@ -2,39 +2,21 @@ import itertools
 import os
 import torch
 from tqdm import tqdm
-from monai.networks.nets.autoencoderkl import AutoencoderKL
-from model import ASLDM
-from utils import visualize_2d_image
-from utils import read_dir
 import PIL
 import monai.transforms as mt
 from monai.data import DataLoader, Dataset
 from monai.networks.schedulers.pndm import PNDMScheduler
-from monai.networks.nets.diffusion_model_unet import DiffusionModelUNet
-from monai.utils import first, set_determinism
+from monai.utils import set_determinism
 import torch.multiprocessing as mp
-
 mp.set_sharing_strategy("file_system")
-import matplotlib
-
-matplotlib.use("Agg")  # 使用非交互式后端
-import matplotlib.pyplot as plt
 from pathlib import Path
 from skimage.metrics import peak_signal_noise_ratio as psnr
 from skimage.metrics import structural_similarity as ssim
 from sklearn.metrics import mean_absolute_error as mae
-import ants
-import numpy as np
-def np_to_ants(img_np):
-    np_img = np.array(img_np).astype(np.float32)
-    ants_img = ants.from_numpy(np_img)
-    return ants_img
-
-
-def ants_to_tensor(ants_img):
-    np_img = ants_img.numpy()
-    tensor_img = torch.tensor(np_img)
-    return tensor_img
+from monai.networks.nets.autoencoderkl import AutoencoderKL
+from model import ASLDM
+from utils import visualize_2d_image
+from utils import read_dir
 
 if __name__ == "__main__":
     seed = 42
